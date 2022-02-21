@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>INICIO</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <header th:replace="layout/plantilla :: header"></header>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/agregar}">[[#{persona.crear}]]</a>
+        </br>
+        <div th:if="${personas != null and !personas.empty}">
+            <table>
+                <tr>
+                <th >[[#{persona.nombre}]]</th>
+                <th >[[#{persona.apellido}]]</th>
+                <th >[[#{persona.email}]]</th>
+                <th >[[#{persona.telefono}]]</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">[[#{form.edit}]]</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">[[#{form.delete}]]</th>
+                </tr>
+            <tr th:each="persona : ${personas}">
+                <td th:text="${persona.nombre}"></td>
+                <td th:text="${persona.apellido}"></td>
+                <td th:text="${persona.email}"></td>
+                <td th:text="${persona.telefono}"></td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/editar/} + ${persona.id}"/>[[#{form.edit}]]</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/eliminar(id = ${persona.id})}"/>[[#{form.delete}]]</td> 
+
+            </tr>
+            </table>
+        </div>
+        <div th:if="${personas == null or personas.empty}">
+            [[#{persona.empty-list-message}]]        
+        </div>
+        <footer th:replace="layout/plantilla :: footer"></footer>
+    </body>
+</html>
